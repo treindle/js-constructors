@@ -9,12 +9,34 @@
  * @property {number} cost
  * @property {string} description
  */
+//Class definition
+ function Spell (name, cost, description) {
+  
+  //instance properties 
+   this.name = name;
+   this.cost = cost;
+   this.description = description;
+   
+ }
+   //instance methods
 
   /**
    * Print out all spell details and format it nicely.
    * The format doesnt matter, as long as it contains the spell name, cost, and description.
    * @name printDetails
    */
+Spell.prototype.printDetails = function() {
+   console.log(this.name + " " + this.cost + " " + this.description);
+};
+
+   // var devastation = new Spell ("Devastation", 5, "Ruins lives.");
+   // devastation.printDetails();
+   
+   // var desecration = new Spell ("Desecration", 5, "Ruins souls.");
+   // desecration.printDetails();
+
+   // var debauchery = new Spell ("Debauchery", 15, "Ruins careers.");
+   // debauchery.printDetails();
 
 /**
  * A spell that deals damage.
@@ -40,7 +62,17 @@
  * @property {number} damage
  * @property {string} description
  */
+  function DamageSpell ( name, cost, damage, description ) {
+      this.damage = damage;
 
+      Spell.call(this, name, cost, description);
+  }
+
+  DamageSpell.prototype = Object.create(Spell.prototype, {
+   constructor : {
+      value : Spell
+   }
+  });
 /**
  * Now that you've created some spells, let's create
  * `Spellcaster` objects that can use them!
@@ -54,7 +86,12 @@
  * @property {mana} mana
  * @property {boolean} isAlive  Default value should be `true`.
  */
-
+ function SpellCaster ( name, health, mana ) {
+   this.health = health;
+   this.mana = mana;
+   this.isAlive = true;
+   
+ }
   /**
    * The spellcaster loses health equal to `damage`.
    * Health should never be negative.
