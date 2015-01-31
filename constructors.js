@@ -167,10 +167,10 @@ Spell.prototype.printDetails = function() {
           return false;
         }        
         
-        } else if (spell instanceof DamageSpell && !(target instanceof Spellcaster)) {
+        } if (spell instanceof DamageSpell && !(target instanceof Spellcaster)) {
         return false;      
         
-        } else if (spell instanceof Spell && !(spell instanceof DamageSpell) && !(target instanceof Spellcaster)) {
+        } if (spell instanceof Spell && !(spell instanceof DamageSpell) && !(target instanceof Spellcaster)) {
           if (this.spendMana(spell.cost)) {
           return true;
         } else {
