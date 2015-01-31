@@ -29,14 +29,7 @@ Spell.prototype.printDetails = function() {
    console.log(this.name + " " + this.cost + " " + this.description);
 };
 
-   // var devastation = new Spell ("Devastation", 5, "Ruins lives.");
-   // devastation.printDetails();
-   
-   // var desecration = new Spell ("Desecration", 5, "Ruins souls.");
-   // desecration.printDetails();
 
-   // var debauchery = new Spell ("Debauchery", 15, "Ruins careers.");
-   // debauchery.printDetails();
 
 /**
  * A spell that deals damage.
@@ -86,11 +79,12 @@ Spell.prototype.printDetails = function() {
  * @property {mana} mana
  * @property {boolean} isAlive  Default value should be `true`.
  */
- function SpellCaster ( name, health, mana ) {
+ function Spellcaster ( name, health, mana ) {
+   this.name = name;
    this.health = health;
    this.mana = mana;
    this.isAlive = true;
-   
+
  }
   /**
    * The spellcaster loses health equal to `damage`.
@@ -101,7 +95,21 @@ Spell.prototype.printDetails = function() {
    * @name inflictDamage
    * @param  {number} damage  Amount of damage to deal to the spellcaster
    */
+   Spellcaster.prototype.inflictDamage = function ( damage ) {
+       
+       this.health -= damage; //  this.health = this.health - this.damage;
 
+       if (this.health < 0) {
+         this.health = 0;
+       }
+     
+         if (this.health <= 0) {
+            this.isAlive = false;
+         } 
+   };         
+
+      
+      
   /**
    * Reduces the spellcaster's mana by `cost`.
    * Mana should only be reduced only if there is enough mana to spend.
@@ -110,7 +118,16 @@ Spell.prototype.printDetails = function() {
    * @param  {number} cost      The amount of mana to spend.
    * @return {boolean} success  Whether mana was successfully spent.
    */
+   Spellcaster.prototype.spendMana = function ( cost ) {
+         
+    if (this.mana < cost) {
+      return false;
+    } else {
+      this.mana -= cost; 
+      return true;
+    }    
 
+  };
   /**
    * Allows the spellcaster to cast spells.
    * The first parameter should either be a `Spell` or `DamageSpell`.
@@ -136,3 +153,43 @@ Spell.prototype.printDetails = function() {
    * @param  {Spellcaster} target         The spell target to be inflicted.
    * @return {boolean}                    Whether the spell was successfully cast.
    */
+
+  Spellcaster.prototype.invoke = function(spell, target) {
+
+    if (spell === undefined || spell === null) {
+        return false;
+    }
+      if (spell instanceof DamageSpell && target instanceof Spellcaster) {
+        if (this.spendMana(spell.cost)) {
+          target.inflictDamage(spell.damage);
+          return true;
+        } else  {
+          return false;
+        }        
+        
+        } else if (spell instanceof DamageSpell && !(target instanceof Spellcaster)) {
+        return false;      
+        
+        } else if (spell instanceof Spell && !(spell instanceof DamageSpell) && !(target instanceof Spellcaster)) {
+          if (this.spendMana(spell.cost)) {
+          return true;
+        } else {
+        return false;
+      }
+    }
+  };
+
+  // var terrorism = new Spellcaster ("Al Qaeda", 300, 100);
+  // var devastation = new Spell ("Devastation", 5, "Ruins lives.");
+
+  // devastation.printDetails();
+  
+  // terrorism.invoke(devastation, sacriligion);
+
+  // var sacriligion = new Spellcaster ("Harry Potter", 700, 25);
+  // var desecration = new Spell ("Desecration", 5, "Ruins souls.");
+  //  desecration.printDetails();
+
+  
+  // var debauchery = new Spell ("Debauchery", 15, "Ruins careers.");
+  //  debauchery.printDetails();
